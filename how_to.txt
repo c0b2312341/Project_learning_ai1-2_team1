@@ -1,0 +1,23 @@
+初期操作：ほんとに最初だけ
+git clone "URL"
+
+
+
+更新操作1：いつもの
+git add .
+または
+git add ファイル名
+
+
+
+更新操作2：githubから、今の最新のを持ってくる
+git pull origin
+
+
+ブランチの作成
+git branch ブランチ名
+
+現在のブランチ名の表示
+git branch
+
+
