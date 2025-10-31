@@ -23,15 +23,45 @@ class Room: # オバタ
         self.visited = False    # プレイヤーが足を踏み入れたか
 
 class Player: # イチカワ
+    """ 勇者(プレイヤー)の管理 """
     def __init__(self):
-        self.now_x = 0
-        self.now_y = 0
-        self.hp = PLAYER_MAX_HP
-        self.attack = PLAYER_BASE_ATTACK
-        self.defence = PLAYER_BASE_DEFENSE
-        self.sword_bool = False
-        self.shielld_bool = False
-        self.armor
+        self.now_x = 0                      # プレイヤーの現在X座標
+        self.now_y = 0                      # プレイヤーの現在Y座標
+        self.hp = PLAYER_MAX_HP             # プレイヤーの体力   
+        self.attack = PLAYER_BASE_ATTACK    # プレイヤーの攻撃力
+        self.defence = PLAYER_BASE_DEFENSE  # プレイヤーの防御力
+        self.sword_bool = False             # 剣を装備しているか
+        self.shielld_bool = False           # 盾を装備しているか
+        self.armor_bool = False             # 鎧を装備しているか
+        self.number_of_herbs = 0            # 薬草の所持数
+        self.is_defending  = False          # 防御状態か
+
+    def update_stats(self):
+        """ 
+        ステータス更新処理 
+        装備状況に応じて攻撃力、防御力を更新
+        """
+        self.attack = PLAYER_BASE_ATTACK 
+        if self.sword_bool == True:
+            self.attack += SWORD_BONUS
+
+        self.defense = PLAYER_BASE_DEFENSE
+        if self.shield_bool == True:
+            self.defense += SHIELD_BONUS
+
+        if self.armor_bool == True:
+            self.defense += ARMOR_BONUS
+
+    def heal(self):
+        """ 回復処理"""
+        if self.number_of_herbs > 0:
+            self.hp += HEAL_AMOUNT
+            # 最大HPを超えないように調整
+            if self.hp > PLAYER_MAX_HP:
+                self.hp = PLAYER_MAX_HP
+
+    #def take_damage(self,damage):
+
 
 class Enemy:
     def __init__(self, name, hp, strong_attack, weak_attack, pierce_attack):
