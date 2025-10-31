@@ -24,14 +24,16 @@ class Room: # オバタ
 
 class Player: # イチカワ
     def __init__(self):
-        self.now_x = 0
-        self.now_y = 0
+        self.now_x = None
+        self.now_y = None
         self.hp = PLAYER_MAX_HP
         self.attack = PLAYER_BASE_ATTACK
         self.defence = PLAYER_BASE_DEFENSE
         self.sword_bool = False
         self.shielld_bool = False
-        self.armor
+        self.armor = False
+        self.yakusou = False
+        self.numa = False
 
 class Enemy:
     def __init__(self, name, hp, strong_attack, weak_attack, pierce_attack):
@@ -198,18 +200,83 @@ def battle(player, enemy):
 def main(): # フジモト
     """
     初期化項目
-    ・マップ（空マップとして、2次元リスト）
-    ・勇者
-    ・敵（3つ）
+    ・マップ（空のマップ、2次元リスト）
+    ・勇者（プレイヤー）
+    ・敵（3つ、座標指定）
 
     初期動作
+    ・ルール説明
 
     ループ処理
+    ・移動処理
+        ・マップ表示
+        ・入力
+        ・反映
+    ・座標判定
+        ・敵
+        ・剣
+        ・盾
+        ・薬草
+        ・沼
+    ・終了判定
+
+    マップ概要
+    （城）（__）（__）（沼）（__）
+    （__）（村）（__）（__）（ど）
+    （沼）（__）（剣）（__）（__）
+    （あ）（__）（__）（沼）（沼）
+    （__）（盾）（廃）（沼）（り）
     """
 
+    # 初期化
+    init_map()  # マップ初期化
+    # print("map初期化", bool(map))
+    player = Player()  # プレイヤー初期化
+    player.now_x, player.now_y = 0, 0  # プレイヤー座標初期化
+    # print("プレイヤー初期化")
 
-    #初期化
-    init_map()
-    player = Player()
+    # 初期動作
+    show_rules()  # ルール説明
+
+    # ループ処理
+    # 移動処理
+    show_map()
+    char = "(W, A, S, D)を入力してください"
+    input("入力：")
+    # 入力反映
+    move = (0, 0)
+    if char == "W":
+        move[1] += 1
+    elif char == "A":
+        move[0] -= 1
+    elif char == "S":
+        move[1] -= 1
+    elif char == "D":
+        move[0] += 1
+    else:
+        print("please retry !")
+    if 0 <= player.now_x + move[0] <= 4 and 0 <= player.now_y + move[1] <= 4:
+        player.now_x += move[0]
+        player.now_y += move[1]
+
+    # 座標判定
+    # 敵判定
+    now_room : Room = map[player.now_y][player.now_x]  # (x, y) の部屋情報を取得
+    if bool(now_room.has_enemy):
+        pass  # バトル関数予定
+    if bool(now_room.has_item):
+        # 剣盾判定
+        if (player.now_x, player.now_y) == (2, 2):  # 剣
+            player.sword_bool = True
+        if (player.now_x, player.now_y) == (2, 2):  # 盾
+            player.shielld_bool = True
+        # 薬草
+        if (player.now_x, player.now_y) == (2, 4):  # 薬草
+            player.yakusou = True
+    if now_room.is_swamp:
+        player.numa = True
+
+    # 終了条件
+    pass  # バトルシステム
 
 main()
